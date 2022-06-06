@@ -10,6 +10,7 @@ class Board
 {
 public :
     sf::RenderWindow* window;
+
     string board[8][8];
     PieceClass * pieces[2][16];
     int picesCounter[2] = {0};
@@ -17,6 +18,13 @@ public :
     vector<string> finalStr, finalStr2;
 
     Board(sf::RenderWindow* _window);
+
+    Sprite sp;
+    Texture boardTex;
+    Sprite sp2;
+    Texture boardTex2;
+
+    void Init();
     void newPiece(PieceClass *piece);
     bool checkCheck(char color);
     vector<Position> validMoves1(PieceClass *piece);

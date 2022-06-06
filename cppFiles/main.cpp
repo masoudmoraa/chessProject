@@ -7,7 +7,7 @@ using namespace sf;
 int main()
 {
     // Board chess;
-    RenderWindow window(VideoMode(1080, 720), "my window is not working", Style::Titlebar | Style::Close);
+    RenderWindow window(VideoMode(1080, 880), "my window is not working", Style::Titlebar | Style::Close);
     Board chess(&window);
     chess.run();
     return 0;

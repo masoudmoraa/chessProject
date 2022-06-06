@@ -4,6 +4,9 @@
 class PieceClass
 {
     public :
+        Sprite sprt;
+        Texture tex;
+        string path = "";
         int number;
         char color;
         char name;

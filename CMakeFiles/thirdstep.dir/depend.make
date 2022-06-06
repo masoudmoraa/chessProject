@@ -21,6 +21,7 @@ CMakeFiles/thirdstep.dir/cppFiles/Board.cpp.o: headers/PieceClass.h
 CMakeFiles/thirdstep.dir/cppFiles/Board.cpp.o: headers/Position.h
 CMakeFiles/thirdstep.dir/cppFiles/Board.cpp.o: headers/Queen.h
 CMakeFiles/thirdstep.dir/cppFiles/Board.cpp.o: headers/Rook.h
+CMakeFiles/thirdstep.dir/cppFiles/Board.cpp.o: headers/helperFunc.h
 CMakeFiles/thirdstep.dir/cppFiles/Board.cpp.o: headers/main.h
 
 CMakeFiles/thirdstep.dir/cppFiles/King.cpp.o: cppFiles/King.cpp

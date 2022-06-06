@@ -22,6 +22,7 @@ CMakeFiles/thirdstep.dir/cppFiles/Board.cpp.o
  headers/Position.h
  headers/Queen.h
  headers/Rook.h
+ headers/helperFunc.h
  headers/main.h
 CMakeFiles/thirdstep.dir/cppFiles/King.cpp.o
  /home/masoud/Desktop/UT/4002/AP1401/Project/part2/chess/cppFiles/King.cpp

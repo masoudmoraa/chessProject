@@ -1,8 +1,21 @@
 #include "Board.h"
-
+#include "helperFunc.h"
 Board :: Board(sf::RenderWindow* _window) : window(_window)
 {
+    this->window->setFramerateLimit(60);
+}
+void Board :: Init()
+{   
+
+    boardTex.loadFromFile("pictures/board2.png");
+    sp.setTexture(boardTex);
+    sp.setScale((float)880./1360, (float)880./1360);
+    sp.setPosition(0,0);
     
+    // boardTex2.loadFromFile("pictures/board3.jpg");
+    // sp2.setTexture(boardTex2);
+    // sp2.setScale((float)280./1360, (float)280./1360);
+    // sp2.setPosition(30,850);
     // DW - MW - DB - MB
     char mode[2];
     cin >> mode;
@@ -512,8 +525,28 @@ vector<string> Board :: sortTheList(vector<string> finalStr, int length)
 
 void Board :: run()
 {
-    cout << "1";
-    // this->init();
+    Init();
+    for (size_t i = 0; i < 2; i++)
+    {
+        for (size_t j = 0; picesCounter[i] > j; j++)
+        {
+                if(pieces[i][j]->color == 'B') pieces[i][j]->path += "black";
+                else pieces[i][j]->path += "white";
+                if(pieces[i][j]->name == 'K') pieces[i][j]->path += "King";
+                if(pieces[i][j]->name == 'Q') pieces[i][j]->path += "Queen";
+                if(pieces[i][j]->name == 'R') pieces[i][j]->path += "Rook";
+                if(pieces[i][j]->name == 'B') pieces[i][j]->path += "Bishop";
+                if(pieces[i][j]->name == 'N') pieces[i][j]->path += "Knight";
+                if(pieces[i][j]->name == 'P') pieces[i][j]->path += "Pawn";
+                pieces[i][j]->tex.loadFromFile("pictures/" + pieces[i][j]->path + ".png");
+                pieces[i][j]->sprt.setTexture(pieces[i][j]->tex);
+                float piece_scale_x = (float)85. / pieces[i][j]->sprt.getTexture()->getSize().x;
+                float piece_scale_y = (float)85. / pieces[i][j]->sprt.getTexture()->getSize().y;
+                pieces[i][j]->sprt.setScale(piece_scale_x, piece_scale_y);
+                pieces[i][j]->sprt.setPosition((42 + 105 * pieces[i][j]->pos.y), (20 + 105 * pieces[i][j]->pos.x));
+        }      
+    }
+    
     this->window->display();
     while (this->window->isOpen()) {
         sf::Event event;
@@ -523,19 +556,29 @@ void Board :: run()
                 this->window->close();
             }
             if (sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
-                cout << "chapo feshar dadam\n";
                 this->click(sf::Mouse::getPosition(*(this->window)));
             }
+            // this->window->draw(this->sp);
+            
         }
-    //     this->window->clear(sf::Color(150, 150, 150));
-    //     this->update_status_text();
-    //     this->draw();
+        this->window->draw(sp);
+        // this->window->draw(sp2);
+        this->update();
+        this->window->display();
+
     }
 }
 
 void Board :: update()
 {
-
+    for(int i = 0; i < picesCounter[0]; i++)
+    {
+        this->window->draw(pieces[0][i]->sprt);
+    }
+    for(int i = 0; i < picesCounter[1]; i++)
+    {
+        this->window->draw(pieces[1][i]->sprt);
+    }
 }
 
 void Board :: click(const sf::Vector2i& position)
