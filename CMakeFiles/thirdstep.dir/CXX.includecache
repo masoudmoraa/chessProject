@@ -53,6 +53,8 @@ headers/PieceClass.h
 headers/Move.h
 Position.h
 headers/Position.h
+SFML/Graphics.hpp
+headers/SFML/Graphics.hpp
 
 headers/Pawn.h
 main.h

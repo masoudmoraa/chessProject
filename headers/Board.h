@@ -13,6 +13,7 @@ public :
 
     string board[8][8];
     PieceClass * pieces[2][16];
+    char mode[2];
     int picesCounter[2] = {0};
     vector<Action> actions;
     vector<string> finalStr, finalStr2;
@@ -21,6 +22,11 @@ public :
 
     Sprite sp;
     Texture boardTex;
+
+    RectangleShape selectedrect;
+    bool flagsectedrect = false;
+    vector <Move> valid_moves;
+
     Sprite sp2;
     Texture boardTex2;
 
@@ -40,5 +46,8 @@ public :
     vector<string> sortTheList(vector<string> finalStr, int length);\
     void run();
     void update();
-    void click(const sf::Vector2i& position);
+    bool click(const sf::Vector2i& position);
+    void show_selected_piece(const sf::Vector2i& position);
+    Vector2i whichPiece(const sf::Vector2i& position);
+    void show_move(vector <Move> valid);
 };
