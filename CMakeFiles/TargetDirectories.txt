@@ -1,0 +1,3 @@
+/home/masoud/Desktop/UT/4002/AP1401/Project/part2/chess/CMakeFiles/rebuild_cache.dir
+/home/masoud/Desktop/UT/4002/AP1401/Project/part2/chess/CMakeFiles/edit_cache.dir
+/home/masoud/Desktop/UT/4002/AP1401/Project/part2/chess/CMakeFiles/thirdstep.dir
