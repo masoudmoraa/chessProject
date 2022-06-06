@@ -6,41 +6,7 @@
 
 #IncludeRegexTransform: 
 
-/home/masoud/Desktop/UT/4002/AP1401/Project/part2/chess/cppFiles/Bishop.cpp
-Bishop.h
-/home/masoud/Desktop/UT/4002/AP1401/Project/part2/chess/cppFiles/Bishop.h
-
 /home/masoud/Desktop/UT/4002/AP1401/Project/part2/chess/cppFiles/Board.cpp
-Board.h
-/home/masoud/Desktop/UT/4002/AP1401/Project/part2/chess/cppFiles/Board.h
-
-/home/masoud/Desktop/UT/4002/AP1401/Project/part2/chess/cppFiles/King.cpp
-King.h
-/home/masoud/Desktop/UT/4002/AP1401/Project/part2/chess/cppFiles/King.h
-
-/home/masoud/Desktop/UT/4002/AP1401/Project/part2/chess/cppFiles/Knight.cpp
-Knight.h
-/home/masoud/Desktop/UT/4002/AP1401/Project/part2/chess/cppFiles/Knight.h
-
-/home/masoud/Desktop/UT/4002/AP1401/Project/part2/chess/cppFiles/Pawn.cpp
-Pawn.h
-/home/masoud/Desktop/UT/4002/AP1401/Project/part2/chess/cppFiles/Pawn.h
-
-/home/masoud/Desktop/UT/4002/AP1401/Project/part2/chess/cppFiles/PiecesClass.cpp
-PieceClass.h
-/home/masoud/Desktop/UT/4002/AP1401/Project/part2/chess/cppFiles/PieceClass.h
-
-/home/masoud/Desktop/UT/4002/AP1401/Project/part2/chess/cppFiles/Queen.cpp
-Queen.h
-/home/masoud/Desktop/UT/4002/AP1401/Project/part2/chess/cppFiles/Queen.h
-
-/home/masoud/Desktop/UT/4002/AP1401/Project/part2/chess/cppFiles/Rook.cpp
-Rook.h
-/home/masoud/Desktop/UT/4002/AP1401/Project/part2/chess/cppFiles/Rook.h
-
-/home/masoud/Desktop/UT/4002/AP1401/Project/part2/chess/cppFiles/main.cpp
-main.h
-/home/masoud/Desktop/UT/4002/AP1401/Project/part2/chess/cppFiles/main.h
 Board.h
 /home/masoud/Desktop/UT/4002/AP1401/Project/part2/chess/cppFiles/Board.h
 
@@ -67,6 +33,8 @@ Rook.h
 headers/Rook.h
 Pawn.h
 headers/Pawn.h
+SFML/Graphics.hpp
+-
 
 headers/King.h
 main.h

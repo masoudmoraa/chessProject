@@ -1,7 +1,8 @@
 #include "Board.h"
 
-Board :: Board()
+Board :: Board(sf::RenderWindow* _window) : window(_window)
 {
+    
     // DW - MW - DB - MB
     char mode[2];
     cin >> mode;
@@ -47,24 +48,7 @@ Board :: Board()
     }
     int colorNum = 0;
     if(mode[0] == 'B') colorNum = 1;
-    if (mode[1] == 'D')
-    {
-        if(defenceMode(1, colorNum))
-        {
-            finalStr2 = sortTheList(finalStr2, finalStr2.size());
-            for(string a : finalStr2) cout << a << "\n";
-        }
-        else cout << "No Answer!\n";
-    }
-    if (mode[1] == 'M')
-    {
-        if(mateMode(1, colorNum))
-        {
-            finalStr = sortTheList(finalStr, finalStr.size());
-            for(string a : finalStr) cout << a << "\n";
-        }
-        else cout << "No Answer!\n";
-    }
+
 }
 
 void Board :: newPiece(PieceClass *piece)
@@ -524,4 +508,37 @@ vector<string> Board :: sortTheList(vector<string> finalStr, int length)
                 finalStr[j] = tmp;
             }
     return finalStr;
+}
+
+void Board :: run()
+{
+    cout << "1";
+    // this->init();
+    this->window->display();
+    while (this->window->isOpen()) {
+        sf::Event event;
+        // cout << "salaam";
+        while (this->window->pollEvent(event)) {
+            if (event.type == sf::Event::Closed) {
+                this->window->close();
+            }
+            if (sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
+                cout << "chapo feshar dadam\n";
+                this->click(sf::Mouse::getPosition(*(this->window)));
+            }
+        }
+    //     this->window->clear(sf::Color(150, 150, 150));
+    //     this->update_status_text();
+    //     this->draw();
+    }
+}
+
+void Board :: update()
+{
+
+}
+
+void Board :: click(const sf::Vector2i& position)
+{
+
 }
