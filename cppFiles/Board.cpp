@@ -464,6 +464,7 @@ void Board :: Do(PieceClass *piece, Move movee, int colorNum, int otherColorNum)
     currentAct.boardStr1 = board[movee.a.x][movee.a.y]; currentAct.boardStr2 = board[movee.b.x][movee.b.y];
     currentAct.number1   = piece->number;
     currentAct.color1    = colorNum;
+    piece->sprt.setPosition(42 + 105 * movee.b.y, 20 + 105 * movee.b.x);
     if(board[movee.b.x][movee.b.y] == "  ")
     {
         board[movee.b.x][movee.b.y] = board[movee.a.x][movee.a.y]; board[movee.a.x][movee.a.y] = currentAct.boardStr2;
@@ -478,6 +479,7 @@ void Board :: Do(PieceClass *piece, Move movee, int colorNum, int otherColorNum)
         piece->pos.x = movee.b.x;                                  piece->pos.y = movee.b.y;
         pieces[otherColorNum][movee.number2]->pos.x = -1;
         pieces[otherColorNum][movee.number2]->pos.y = -1;
+        pieces[otherColorNum][movee.number2]->sprt.setPosition(2000,2000);
     }
     actions.push_back(currentAct);
     return;
@@ -551,7 +553,6 @@ void Board :: run()
     while (this->window->isOpen()) {
         this->window->draw(sp);
         sf::Event event;
-        // cout << "salaam";
         while (this->window->pollEvent(event)) {
             if (event.type == sf::Event::Closed) {
                 this->window->close();
@@ -560,13 +561,11 @@ void Board :: run()
                 Vector2i mousePos = sf::Mouse::getPosition(*(this->window));
                 if(click(mousePos))
                 {
-                    show_selected_piece(mousePos);
                     Vector2i pieceNum = whichPiece(mousePos);
+                    show_selected_piece(mousePos);
                     valid_moves  = validMoves2(pieces[pieceNum.x][pieceNum.y], validMoves1(pieces[pieceNum.x][pieceNum.y]));
-                    // cout << valid_moves.size() << "\n";
                 }
             }
-            
         }
         if(flagsectedrect)
         {
@@ -575,8 +574,7 @@ void Board :: run()
                 {
 
                     circle.setRadius(20);
-                    circle.setFillColor(sf::Color(255,191,0));
-                    // cout << 31 + 20 + 105 * a.b.y << "   " << 11 + 20 + a.b.x * 105 << "\n";
+                    circle.setFillColor(sf::Color(128,128,128));
                     circle.setPosition(31 + 10 + a.b.y * 105, 11 + 10 + a.b.x * 105);
                     window->draw(circle);
                 }
@@ -608,18 +606,52 @@ bool Board :: click(const sf::Vector2i& position)
     row = row / 105;
     column = column - 30;
     column = column / 105;
-    if(board[row][column] != "  ") 
+    if(board[row][column][1] == mode[0])
     {
-        if(board[row][column][1] == mode[0]) return true;
+        if(!flagsectedrect)
+        {
+            cout << "selected\n";
+            flagsectedrect = 1;
+            return true;
+        }
+        else
+        {
+            int x = (selectedrect.getPosition().x - 30)/105;
+            int y = (selectedrect.getPosition().y - 10)/105;
+            if(x == column && y == row)
+            {
+                cout << "deselected\n";
+                flagsectedrect = 0;
+                return false;
+            }
+            cout << "selected\n";
+            return true;
+        }
+        cout << "selected\n";
+        return true;
+    }
+    if(!flagsectedrect)
+    {
+        if(board[row][column][1] != ' ') cout << "you are " << mode[0] << endl;
         flagsectedrect = 0;
-        cout << "select one of your pieces!!!" << "\n";
         return false;
     }
-    else 
+    else
     {
+        for(Move a : valid_moves)
+        {
+            if(a.b.x == row && a.b.y == column)
+            {
+                cout << "Do \n";
+                flagsectedrect = 0;
+                return false;
+            }
+        }
+        cout << "not found \n";
+        flagsectedrect = 1;
         return false;
-        flagsectedrect = 0;
     }
+    return false;
 }
 void Board :: show_selected_piece(const sf::Vector2i& position)
 {
@@ -632,8 +664,8 @@ void Board :: show_selected_piece(const sf::Vector2i& position)
     column = column / 105;
     
     selectedrect.setSize(sf::Vector2f(105, 105));
-    selectedrect.setFillColor(sf::Color(255,191,0));
-    selectedrect.setPosition(31 + 105 * column, 11 + 105 * row);
+    selectedrect.setFillColor(sf::Color(128,128,128));
+    selectedrect.setPosition(30 + 105 * column, 11 + 105 * row);
 }
 
 Vector2i Board :: whichPiece(const sf::Vector2i& position)
