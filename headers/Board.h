@@ -17,6 +17,7 @@ public :
     int picesCounter[2] = {0};
     vector<Action> actions;
     vector<string> finalStr, finalStr2;
+    vector<Move> badMove, goodMove;
 
     Board(sf::RenderWindow* _window);
 
@@ -26,6 +27,10 @@ public :
     RectangleShape selectedrect;
     bool flagsectedrect = false;
     vector <Move> valid_moves;
+
+    CircleShape circle;
+    CircleShape gCircle;
+    CircleShape bCircle;
 
     Sprite sp2;
     Texture boardTex2;
@@ -50,4 +55,6 @@ public :
     void show_selected_piece(const sf::Vector2i& position);
     Vector2i whichPiece(const sf::Vector2i& position);
     void show_move(vector <Move> valid);
+    void draw_possible_moves();
+
 };

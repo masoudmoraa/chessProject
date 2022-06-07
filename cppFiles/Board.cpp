@@ -362,6 +362,7 @@ bool Board :: defenceMode(int turn, int color)
                 Do(pieces[color][i], a, color, otherColor);
                 if(mateMode(1, otherColor))
                 {
+                    badMove.push_back(a);
                     tmpStr.push_back(outputPosFormat(a.a, pieces[color][i]->name, pieces[color][i]->color, a.b));
                 }
                 Undo();
@@ -399,18 +400,16 @@ bool Board :: mateMode(int turn, int color)
                 Do(pieces[color][i], a, color, otherColor);
                 if(mateMode(2, otherColor))
                 {
+                    goodMove.push_back(a);
                     tmpStr.push_back(outputPosFormat(a.a, pieces[color][i]->name, pieces[color][i]->color, a.b));
                 }
                 Undo();
             }
-            if(validMovesList.size() == tmpStr.size() && tmpStr.size() != 0 )
+
+            for (string a : tmpStr)
             {
-                finalStr.push_back(outputPieceFormat(pieces[color][i]->pos, pieces[color][i]->name, pieces[color][i]->color));
-            }
-            else
-            {
-                for (string a : tmpStr)
-                    finalStr.push_back(a);
+
+                finalStr.push_back(a);
             }
         }
         if (finalStr.size() > 0) return true;
@@ -496,6 +495,7 @@ void Board :: Undo()
         board[action.move.b.x][action.move.b.y] = action.boardStr2;
         pieces[action.color1][action.number1]->pos.x = action.move.a.x;
         pieces[action.color1][action.number1]->pos.y = action.move.a.y;
+        pieces[action.color1][action.number1]->sprt.setPosition(42 + 105 * action.move.a.y, 20 + 105 * action.move.a.x);
         actions.pop_back();
         return;
     }
@@ -507,6 +507,8 @@ void Board :: Undo()
         pieces[action.color1][action.number1]->pos.y = action.move.a.y;
         pieces[action.color2][action.number2]->pos.x = action.move.b.x;
         pieces[action.color2][action.number2]->pos.y = action.move.b.y;
+        pieces[action.color1][action.number1]->sprt.setPosition(42 + 105 * action.move.a.y, 20 + 105 * action.move.a.x);
+        pieces[action.color2][action.number2]->sprt.setPosition(42 + 105 * action.move.b.y, 20 + 105 * action.move.b.x);
         actions.pop_back();
         return;
     }
@@ -548,7 +550,7 @@ void Board :: run()
                 pieces[i][j]->sprt.setPosition((42 + 105 * pieces[i][j]->pos.y), (20 + 105 * pieces[i][j]->pos.x));
         }      
     }
-    CircleShape circle;
+
     this->window->display();
     while (this->window->isOpen()) {
         this->window->draw(sp);
@@ -561,23 +563,20 @@ void Board :: run()
                 Vector2i mousePos = sf::Mouse::getPosition(*(this->window));
                 if(click(mousePos))
                 {
+                    goodMove.clear();
+                    badMove.clear();
                     Vector2i pieceNum = whichPiece(mousePos);
                     show_selected_piece(mousePos);
                     valid_moves  = validMoves2(pieces[pieceNum.x][pieceNum.y], validMoves1(pieces[pieceNum.x][pieceNum.y]));
+                    mateMode(1, pieceNum.x);
+                    defenceMode(1, pieceNum.x);
                 }
             }
         }
         if(flagsectedrect)
         {
             this->window->draw(selectedrect);
-            for(Move a : valid_moves)
-                {
-
-                    circle.setRadius(20);
-                    circle.setFillColor(sf::Color(128,128,128));
-                    circle.setPosition(31 + 10 + a.b.y * 105, 11 + 10 + a.b.x * 105);
-                    window->draw(circle);
-                }
+            draw_possible_moves();
         } 
         this->update();
         this->window->display();
@@ -633,6 +632,7 @@ bool Board :: click(const sf::Vector2i& position)
     if(!flagsectedrect)
     {
         if(board[row][column][1] != ' ') cout << "you are " << mode[0] << endl;
+        else cout << "empty!!!\n";
         flagsectedrect = 0;
         return false;
     }
@@ -642,8 +642,16 @@ bool Board :: click(const sf::Vector2i& position)
         {
             if(a.b.x == row && a.b.y == column)
             {
-                cout << "Do \n";
+                cout << "Move \n";
                 flagsectedrect = 0;
+                int x = selectedrect.getPosition().x;
+                int y = selectedrect.getPosition().y;
+                Vector2i tmp; tmp.x = x; tmp.y = y;
+                Vector2i pieceNum = whichPiece(tmp);
+                if(pieceNum.x == 0) Do(pieces[pieceNum.x][pieceNum.y], a, 0, 1);
+                else Do(pieces[pieceNum.x][pieceNum.y], a, 1, 0);
+                if(mode[0] == 'B') mode[0] = 'W';
+                else mode[0] = 'B';
                 return false;
             }
         }
@@ -700,3 +708,34 @@ Vector2i Board :: whichPiece(const sf::Vector2i& position)
     flagsectedrect = 0;
     return ans;
 }
+void Board :: draw_possible_moves()
+{
+    for(Move a : valid_moves)
+    {
+        circle.setRadius(20);
+        circle.setFillColor(sf::Color(128,128,128));
+        circle.setPosition(31 + 10 + a.b.y * 105, 11 + 10 + a.b.x * 105);
+        window->draw(circle);
+        for(Move b : goodMove)
+        {
+            if(a.a.x == b.a.x && a.a.y == b.a.y && a.b.x == b.b.x && a.b.y == b.b.y)
+            {
+                circle.setRadius(20);
+                circle.setFillColor(sf::Color(0,0,170));
+                circle.setPosition(31 + 10 + a.b.y * 105, 11 + 10 + a.b.x * 105);
+                window->draw(circle);
+            }
+        }
+        for(Move b : badMove)
+        {
+            if(a.a.x == b.a.x && a.a.y == b.a.y && a.b.x == b.b.x && a.b.y == b.b.y)
+            {
+                circle.setRadius(20);
+                circle.setFillColor(sf::Color(170,0,0));
+                circle.setPosition(31 + 10 + a.b.y * 105, 11 + 10 + a.b.x * 105);
+                window->draw(circle);
+            }
+        }
+    }
+}
+
