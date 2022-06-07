@@ -553,6 +553,21 @@ void Board :: run()
 
     this->window->display();
     while (this->window->isOpen()) {
+        this->window->clear(sf::Color(150, 150, 150));
+        if(mode[0] == 'B' && (!checkCheckmate('B'))) 
+        {
+            blackCircle.setRadius(50);
+            blackCircle.setFillColor(sf::Color(0,0,0));
+            blackCircle.setPosition(930, 200);
+            this->window->draw(blackCircle);
+        }
+        else if(mode[0] == 'W' && (!checkCheckmate('W')))
+        {
+            whiteCircle.setRadius(50);
+            whiteCircle.setFillColor(sf::Color(255,255,255));
+            whiteCircle.setPosition(930,600);
+            this->window->draw(whiteCircle);
+        }
         this->window->draw(sp);
         sf::Event event;
         while (this->window->pollEvent(event)) {
@@ -578,6 +593,7 @@ void Board :: run()
             this->window->draw(selectedrect);
             draw_possible_moves();
         } 
+        checkandmate(mode[0]);
         this->update();
         this->window->display();
 
@@ -652,6 +668,7 @@ bool Board :: click(const sf::Vector2i& position)
                 else Do(pieces[pieceNum.x][pieceNum.y], a, 1, 0);
                 if(mode[0] == 'B') mode[0] = 'W';
                 else mode[0] = 'B';
+                checkandmate(mode[0]);
                 return false;
             }
         }
@@ -738,4 +755,31 @@ void Board :: draw_possible_moves()
         }
     }
 }
-
+void Board :: checkandmate(char color)
+{
+    Position kingPos;
+    int colorNum = 0;
+    if(color = 'B') colorNum = 1;
+    for (size_t i = 0; i < picesCounter[colorNum]; i++)
+    {
+        if(pieces[colorNum][i]->name == 'K') 
+        {
+            kingPos = pieces[colorNum][i]->pos;
+        }
+    }
+    
+    if(checkCheck(color))
+    {
+        checkCircle.setRadius(45);
+        checkCircle.setFillColor(sf::Color(220,0,0));
+        checkCircle.setPosition(31 + 5 + kingPos.y * 105, 11 + 10 + kingPos.x * 105);
+        window->draw(checkCircle);
+    }
+    if(checkCheckmate(color))
+    {
+        checkmateRect.setSize(sf::Vector2f(105, 105));
+        checkmateRect.setFillColor(sf::Color(220,0,0));
+        checkmateRect.setPosition(30 + 105 * kingPos.y, 11 + 105 * kingPos.x);
+        window->draw(checkmateRect);
+    }
+}

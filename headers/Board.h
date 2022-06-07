@@ -10,7 +10,6 @@ class Board
 {
 public :
     sf::RenderWindow* window;
-
     string board[8][8];
     PieceClass * pieces[2][16];
     char mode[2];
@@ -18,23 +17,18 @@ public :
     vector<Action> actions;
     vector<string> finalStr, finalStr2;
     vector<Move> badMove, goodMove;
-
-    Board(sf::RenderWindow* _window);
-
     Sprite sp;
     Texture boardTex;
-
     RectangleShape selectedrect;
     bool flagsectedrect = false;
     vector <Move> valid_moves;
-
     CircleShape circle;
-    CircleShape gCircle;
-    CircleShape bCircle;
+    CircleShape whiteCircle;
+    CircleShape blackCircle;
+    CircleShape checkCircle;
+    RectangleShape checkmateRect;    
 
-    Sprite sp2;
-    Texture boardTex2;
-
+    Board(sf::RenderWindow* _window);
     void Init();
     void newPiece(PieceClass *piece);
     bool checkCheck(char color);
@@ -56,5 +50,6 @@ public :
     Vector2i whichPiece(const sf::Vector2i& position);
     void show_move(vector <Move> valid);
     void draw_possible_moves();
+    void checkandmate(char color);
 
 };
