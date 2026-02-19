@@ -15,7 +15,7 @@ void Board :: Init()
     resetButton.setPosition(920, 400);
     resetButton.setFillColor(sf::Color(0, 100, 0));
 
-    font.loadFromFile("arialb.ttf"); 
+    font.loadFromFile("./assets/fonts/arialb.ttf"); 
 
     resetText.setFont(font);
     resetText.setString("Reset");
@@ -44,7 +44,7 @@ void Board :: Init()
     mode[1] = '\0';
 
     // Board texture
-    boardTex.loadFromFile("pictures/board2.png");
+    boardTex.loadFromFile("./assets/images/board/board.png");
     sp.setTexture(boardTex);
     sp.setScale((float)880./1360, (float)880./1360);
     sp.setPosition(0,0);
@@ -557,7 +557,7 @@ void Board :: run()
                 if(pieces[i][j]->name == 'B') pieces[i][j]->path += "Bishop";
                 if(pieces[i][j]->name == 'N') pieces[i][j]->path += "Knight";
                 if(pieces[i][j]->name == 'P') pieces[i][j]->path += "Pawn";
-                pieces[i][j]->tex.loadFromFile("pictures/" + pieces[i][j]->path + ".png");
+                pieces[i][j]->tex.loadFromFile("./assets/images/pieces/" + pieces[i][j]->path + ".png");
                 pieces[i][j]->sprt.setTexture(pieces[i][j]->tex);
                 float piece_scale_x = (float)85. / pieces[i][j]->sprt.getTexture()->getSize().x;
                 float piece_scale_y = (float)85. / pieces[i][j]->sprt.getTexture()->getSize().y;
