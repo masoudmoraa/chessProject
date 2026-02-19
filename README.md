@@ -1,6 +1,15 @@
 # Chess Project
 This project is a graphical chess application developed using the SFML library and built with CMake.
 
+--- 
+
+### Requirements
+To build and run this project, the following tools and libraries are required:  
+- A C++ compiler with C++17 support (GCC or Clang recommended)
+- CMake (version 3.10 or higher)
+- SFML (Simple and Fast Multimedia Library)
+
+---
 ### How to Run
 1. Download the following:
     - cppFiles folder
@@ -112,7 +121,7 @@ RW PW PW -- -- RB -- PW
 -- -- -- -- -- -- KW --
 ``` 
 <p align="center"> 
-    <img src="./assets/images/screenshots/initial.png" width="70%" alt="Initial position"> <br> 
+    <img src="./assets/images/screenshots/initial.png" width="80%" alt="Initial position"> <br> 
     <em>Initial position</em> 
 </p>
 
@@ -121,7 +130,7 @@ In this position, if the White __king moves to the corner of the board__, Black 
 Therefore, this move is marked with a red circle, indicating a critical mistake.
 
 <p align="center"> 
-    <img src="./assets/images/screenshots/k2h1.png" width="70%" alt="White king moves to h1 resulting in a critical mistake"> <br> 
+    <img src="./assets/images/screenshots/k2h1.png" width="80%" alt="White king moves to h1 resulting in a critical mistake"> <br> 
     <em>White king moves to h1 – critical mistake highlighted in red.</em> 
 </p>
 
@@ -129,7 +138,7 @@ Therefore, this move is marked with a red circle, indicating a critical mistake.
 Black can play __Rook to f1__, initiating the forced mating sequence.
 
 <p align="center"> 
-    <img src="./assets/images/screenshots/r2f1.png" width="70%" alt="Black rook moves to f1"> <br> 
+    <img src="./assets/images/screenshots/r2f1.png" width="80%" alt="Black rook moves to f1"> <br> 
     <em>Black plays Rook to f1.</em> 
 </p>
 
@@ -137,7 +146,7 @@ Black can play __Rook to f1__, initiating the forced mating sequence.
 This move puts white in __check__, So the White king’s square is highlighted.  
 
 <p align="center"> 
-    <img src="./assets/images/screenshots/check.png" width="70%" alt="White king in check"> <br> 
+    <img src="./assets/images/screenshots/check.png" width="80%" alt="White king in check"> <br> 
     <em>The White king is in check.</em> 
 </p>
 
@@ -145,7 +154,7 @@ This move puts white in __check__, So the White king’s square is highlighted.
 White has only one legal move available: __King to g2__
 
 <p align="center"> 
-    <img src="./assets/images/screenshots/k2g2.png" width="70%" alt="White king moves to g2"> <br> 
+    <img src="./assets/images/screenshots/k2g2.png" width="80%" alt="White king moves to g2"> <br> 
     <em>White plays King to g2 – the only legal move.</em> 
 </p>
 
@@ -153,14 +162,14 @@ White has only one legal move available: __King to g2__
 Black finishes the game with __Rook to g1__.  
 
 <p align="center"> 
-    <img src="./assets/images/screenshots/r2g1.png" width="70%" alt="Black rook moves to g1 delivering checkmate"> <br> 
+    <img src="./assets/images/screenshots/r2g1.png" width="80%" alt="Black rook moves to g1 delivering checkmate"> <br> 
     <em>Black plays Rook to g1.</em> 
 </p>
 
 This results in checkmate. The White king’s square is highlighted in red, and the turn indicators are no longer displayed. Only the Reset button remains available.  
 
 <p align="center"> 
-    <img src="./assets/images/screenshots/checkmate.png" width="70%" alt="Final checkmate position"> <br> 
+    <img src="./assets/images/screenshots/checkmate.png" width="80%" alt="Final checkmate position"> <br> 
     <em>Final checkmate position.</em> 
 </p>
 
@@ -168,6 +177,6 @@ This results in checkmate. The White king’s square is highlighted in red, and 
 To restart the game, click the Reset button anytime.  
 
 <p align="center"> 
-    <img src="./assets/images/screenshots/reset.png" width="70%" alt="Reset button"> <br> 
+    <img src="./assets/images/screenshots/reset.png" width="80%" alt="Reset button"> <br> 
     <em>Click the Reset button to restore the initial board state.</em> 
 </p>
