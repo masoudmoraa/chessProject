@@ -6,9 +6,18 @@
 #include "Rook.h"
 #include "Pawn.h"
 #include <SFML/Graphics.hpp>
+
+struct GameInput {
+    char mode[2];
+    std::string cells[8][8];
+};
+
+
 class Board
 {
 public :
+    GameInput initialInput;
+    GameInput input;
     sf::RenderWindow* window;
     string board[8][8];
     PieceClass * pieces[2][16];
@@ -20,15 +29,19 @@ public :
     Sprite sp;
     Texture boardTex;
     RectangleShape selectedrect;
-    bool flagsectedrect = false;
+    bool flagselectedrect = false;
     vector <Move> valid_moves;
     CircleShape circle;
     CircleShape whiteCircle;
     CircleShape blackCircle;
     CircleShape checkCircle;
-    RectangleShape checkmateRect;    
+    RectangleShape checkmateRect;  
+    RectangleShape resetButton;  
+    sf::Font font;
+    sf::Text resetText;
 
-    Board(sf::RenderWindow* _window);
+
+    Board(sf::RenderWindow* _window, const GameInput& in);
     void Init();
     void newPiece(PieceClass *piece);
     bool checkCheck(char color);
@@ -51,5 +64,6 @@ public :
     void show_move(vector <Move> valid);
     void draw_possible_moves();
     void checkandmate(char color);
-
+    void clearBoard();
+    void resetGame();
 };

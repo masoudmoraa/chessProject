@@ -1,67 +1,78 @@
 #include "Board.h"
 #include "helperFunc.h"
-Board :: Board(sf::RenderWindow* _window) : window(_window)
+
+Board::Board(sf::RenderWindow* _window, const GameInput& in)
+    : window(_window), input(in), initialInput(in)
 {
-    this->window->setFramerateLimit(60);
+    if (window)
+        window->setFramerateLimit(30);
 }
+
 void Board :: Init()
 {   
+    // reset button
+    resetButton.setSize(sf::Vector2f(120, 60));
+    resetButton.setPosition(920, 400);
+    resetButton.setFillColor(sf::Color(0, 100, 0));
 
+    font.loadFromFile("arialb.ttf"); 
+
+    resetText.setFont(font);
+    resetText.setString("Reset");
+    resetText.setCharacterSize(24);
+    resetText.setFillColor(sf::Color::White);
+    
+    sf::FloatRect textRect = resetText.getLocalBounds();
+    resetText.setOrigin(textRect.left + textRect.width / 2.0f,
+                        textRect.top  + textRect.height / 2.0f);
+
+    resetText.setPosition(resetButton.getPosition().x + resetButton.getSize().x / 2.0f,
+                          resetButton.getPosition().y + resetButton.getSize().y / 2.0f);
+
+    // Black circle
+    blackCircle.setRadius(50);
+    blackCircle.setFillColor(sf::Color(5,5,5));
+    blackCircle.setPosition(930, 175);
+
+    // White circle
+    whiteCircle.setRadius(50);
+    whiteCircle.setFillColor(sf::Color(250,250,250));
+    whiteCircle.setPosition(930,600);
+
+    // turn
+    mode[0] = input.mode[0];
+    mode[1] = '\0';
+
+    // Board texture
     boardTex.loadFromFile("pictures/board2.png");
     sp.setTexture(boardTex);
     sp.setScale((float)880./1360, (float)880./1360);
     sp.setPosition(0,0);
-    
-    // boardTex2.loadFromFile("pictures/board3.jpg");
-    // sp2.setTexture(boardTex2);
-    // sp2.setScale((float)280./1360, (float)280./1360);
-    // sp2.setPosition(30,850);
-    // DW - MW - DB - MB
-    
-    cin >> mode;
-    // Board statu
-    char colorCheck;
-    char helper[2];
+
+    // pieces from input
     for (size_t i = 0; i < 8; i++)
     {
-        for(size_t j = 0; j < 8; j++)
+        for (size_t j = 0; j < 8; j++)
         {
-            cin >> helper;
-            if(helper[0] == '-')
+            std::string cell = input.cells[i][j];
+
+            if (cell == "--")
             {
                 board[i][j] = "  ";
                 continue;
             }
-            colorCheck = helper[1];
-            if(helper[0] == 'K')
-            {
-                newPiece(new King(i, j, colorCheck));
-            }
-            if(helper[0] == 'Q')
-            {
-                newPiece(new Queen(i, j, colorCheck));
-            }
-            if(helper[0] == 'B')
-            {
-                newPiece(new Bishop(i, j, colorCheck));
-            }
-            if(helper[0] == 'N')
-            {
-                newPiece(new Knight(i, j, colorCheck));
-            }
-            if(helper[0] == 'R')
-            {
-                newPiece(new Rook(i, j, colorCheck));
-            }
-            if(helper[0] == 'P')
-            {
-                newPiece(new Pawn(i, j, colorCheck));
-            } 
+
+            char pieceName = cell[0];
+            char colorCheck = cell[1];
+
+            if (pieceName == 'K') newPiece(new King(i, j, colorCheck));
+            else if (pieceName == 'Q') newPiece(new Queen(i, j, colorCheck));
+            else if (pieceName == 'B') newPiece(new Bishop(i, j, colorCheck));
+            else if (pieceName == 'N') newPiece(new Knight(i, j, colorCheck));
+            else if (pieceName == 'R') newPiece(new Rook(i, j, colorCheck));
+            else if (pieceName == 'P') newPiece(new Pawn(i, j, colorCheck));
         }
     }
-    int colorNum = 0;
-    if(mode[0] == 'B') colorNum = 1;
-
 }
 
 void Board :: newPiece(PieceClass *piece)
@@ -261,6 +272,7 @@ vector<Move> Board :: validMoves2(PieceClass *piece, vector<Position> correctPos
         {
             board[to.x][to.y] = number1str;
             board[current.x][current.y] = "  ";
+                
             if(!checkCheck(piece->color))
             {
                 tmp_move.a = current;
@@ -280,8 +292,9 @@ vector<Move> Board :: validMoves2(PieceClass *piece, vector<Position> correctPos
                 {
                     board[to.x][to.y] = number1str;
                     board[current.x][current.y] = "  ";
-                    pieces[otherColorNum][i]->pos.x = -1; pieces[otherColorNum][i]->pos.x = -1;
+                    pieces[otherColorNum][i]->pos.x = -1; pieces[otherColorNum][i]->pos.y = -1;
                     piece->pos.x = to.x;                  piece->pos.y = to.y;
+
                     if(!checkCheck(piece->color))
                     {
                         tmp_move.number2 = i;
@@ -306,6 +319,7 @@ bool Board :: checkCheckmate(int color)
 }
 bool Board :: checkCheckmate(char color)
 {
+
     int colorNum = 0, otherColorNum = 1;
     if (color == 'B')
     {
@@ -313,6 +327,7 @@ bool Board :: checkCheckmate(char color)
         otherColorNum = 0;
     }
     vector<Move> posList;
+
     if(checkCheck(color))
     {
         for (size_t i = 0; i < picesCounter[colorNum]; i++)
@@ -553,42 +568,66 @@ void Board :: run()
 
     this->window->display();
     while (this->window->isOpen()) {
+
+        // Clear window
         this->window->clear(sf::Color(150, 150, 150));
+
+        // Reset button
+        this->window->draw(resetButton);
+        this->window->draw(resetText);
+
+        // Turn circles
         if(mode[0] == 'B' && (!checkCheckmate('B'))) 
         {
-            blackCircle.setRadius(50);
-            blackCircle.setFillColor(sf::Color(0,0,0));
-            blackCircle.setPosition(930, 200);
             this->window->draw(blackCircle);
         }
         else if(mode[0] == 'W' && (!checkCheckmate('W')))
         {
-            whiteCircle.setRadius(50);
-            whiteCircle.setFillColor(sf::Color(255,255,255));
-            whiteCircle.setPosition(930,600);
             this->window->draw(whiteCircle);
         }
         this->window->draw(sp);
+
+
         sf::Event event;
         while (this->window->pollEvent(event)) {
             if (event.type == sf::Event::Closed) {
                 this->window->close();
             }
-            if (sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
+
+            if (event.type == sf::Event::MouseButtonPressed &&
+                event.mouseButton.button == sf::Mouse::Left)
+            {
                 Vector2i mousePos = sf::Mouse::getPosition(*(this->window));
-                if(click(mousePos))
+                Vector2f worldPos = this->window->mapPixelToCoords(mousePos);
+
+                // RESET BUTTON CLICK CHECK
+                if (resetButton.getGlobalBounds().contains(worldPos))
+                {
+                    resetGame();
+                    continue; 
+                }
+
+                // NORMAL BOARD CLICK
+                if (click(mousePos))
                 {
                     goodMove.clear();
                     badMove.clear();
+
                     Vector2i pieceNum = whichPiece(mousePos);
                     show_selected_piece(mousePos);
-                    valid_moves  = validMoves2(pieces[pieceNum.x][pieceNum.y], validMoves1(pieces[pieceNum.x][pieceNum.y]));
+
+                    valid_moves = validMoves2(
+                        pieces[pieceNum.x][pieceNum.y],
+                        validMoves1(pieces[pieceNum.x][pieceNum.y])
+                    );
+
                     mateMode(1, pieceNum.x);
                     defenceMode(1, pieceNum.x);
                 }
             }
         }
-        if(flagsectedrect)
+
+        if(flagselectedrect)
         {
             this->window->draw(selectedrect);
             draw_possible_moves();
@@ -623,10 +662,10 @@ bool Board :: click(const sf::Vector2i& position)
     column = column / 105;
     if(board[row][column][1] == mode[0])
     {
-        if(!flagsectedrect)
+        if(!flagselectedrect)
         {
             cout << "selected\n";
-            flagsectedrect = 1;
+            flagselectedrect = 1;
             return true;
         }
         else
@@ -636,7 +675,7 @@ bool Board :: click(const sf::Vector2i& position)
             if(x == column && y == row)
             {
                 cout << "deselected\n";
-                flagsectedrect = 0;
+                flagselectedrect = 0;
                 return false;
             }
             cout << "selected\n";
@@ -645,11 +684,11 @@ bool Board :: click(const sf::Vector2i& position)
         cout << "selected\n";
         return true;
     }
-    if(!flagsectedrect)
+    if(!flagselectedrect)
     {
-        if(board[row][column][1] != ' ') cout << "you are " << mode[0] << endl;
-        else cout << "empty!!!\n";
-        flagsectedrect = 0;
+        if(board[row][column][1] != ' ') cout << "Current player to move: " << mode[0] << endl;
+        else cout << "Click on a valid cell. \n";
+        flagselectedrect = 0;
         return false;
     }
     else
@@ -659,7 +698,7 @@ bool Board :: click(const sf::Vector2i& position)
             if(a.b.x == row && a.b.y == column)
             {
                 cout << "Move \n";
-                flagsectedrect = 0;
+                flagselectedrect = 0;
                 int x = selectedrect.getPosition().x;
                 int y = selectedrect.getPosition().y;
                 Vector2i tmp; tmp.x = x; tmp.y = y;
@@ -673,14 +712,14 @@ bool Board :: click(const sf::Vector2i& position)
             }
         }
         cout << "not found \n";
-        flagsectedrect = 1;
+        flagselectedrect = 1;
         return false;
     }
     return false;
 }
 void Board :: show_selected_piece(const sf::Vector2i& position)
 {
-    flagsectedrect = 1;
+    flagselectedrect = 1;
     int row = position.y;
     int column = position.x;
     row = row - 10;
@@ -722,7 +761,7 @@ Vector2i Board :: whichPiece(const sf::Vector2i& position)
     }
     ans.x = 10;
     ans.y = 10;
-    flagsectedrect = 0;
+    flagselectedrect = 0;
     return ans;
 }
 void Board :: draw_possible_moves()
@@ -759,12 +798,13 @@ void Board :: checkandmate(char color)
 {
     Position kingPos;
     int colorNum = 0;
-    if(color = 'B') colorNum = 1;
+    if(color == 'B') colorNum = 1;
     for (size_t i = 0; i < picesCounter[colorNum]; i++)
     {
         if(pieces[colorNum][i]->name == 'K') 
         {
             kingPos = pieces[colorNum][i]->pos;
+            break;
         }
     }
     
@@ -782,4 +822,34 @@ void Board :: checkandmate(char color)
         checkmateRect.setPosition(30 + 105 * kingPos.y, 11 + 105 * kingPos.x);
         window->draw(checkmateRect);
     }
+}
+
+void Board::clearBoard()
+{
+    for (int i = 0; i < 2; i++)
+    {
+        for (int j = 0; j < picesCounter[i]; j++)
+        {
+            delete pieces[i][j];
+            pieces[i][j] = nullptr;
+        }
+        picesCounter[i] = 0;
+    }
+
+    for (int i = 0; i < 8; i++)
+        for (int j = 0; j < 8; j++)
+            board[i][j] = "  ";
+
+    goodMove.clear();
+    badMove.clear();
+    valid_moves.clear();
+    actions.clear();
+}
+
+void Board::resetGame()
+{   
+    cout << "Reset button clicked: restore game to initial state \n";
+    clearBoard();
+    input = initialInput;
+    run();
 }
